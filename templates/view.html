@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Todo</title>
+  </head>
+  <body>
+    <ul>
+        <!--Data comes from server not hardcoded here, using a Jinja for-loop to bring the description attribute for data-->
+        {% for d in data %}
+        <li> {{d.description}} </li>
+        {% endfor %}
+    </ul>
+  </body>
+</html>
