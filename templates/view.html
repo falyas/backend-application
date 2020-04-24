@@ -4,16 +4,54 @@
     <meta charset="utf-8">
     <title>Todo</title>
   </head>
+  <style>
+  .error_message{
+    visibility: hidden;
+    color: red;
+  }
+  </style>
   <body>
-    <form method="post" action="/todos/create" />
-        <input type="text" name="description" />
+    <form id="form">
+        <input type="text" id="description" name="description" />
         <input type="submit" value="create" />
     </form>
-    <ul>
+    <div id="error_message" class="error_message"> sorry, something went wrong! </div>
+    <ul id="todos">
         <!--Data comes from server not hardcoded here, using a Jinja for-loop to bring the description attribute for data-->
         {% for d in data %}
         <li> {{d.description}} </li>
         {% endfor %}
     </ul>
   </body>
+  <script>
+  //use the event object on the onsubmit event handler and disable the default behavior because the default behavior refreshes the page
+  form = document.getElementById('form').onsubmit = function(event_object){
+    event_object.preventDefault();
+    fetch('/todos/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        'description': document.getElementById('description').value
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response){
+      //take the string response and parse it as json
+      return response.json();
+    }).then(function(jsonResponse){
+      console.log(jsonResponse);
+      //create an LI element
+      const list_item = document.createElement('LI');
+      //specify the description of the todo item
+      list_item.innerHTML = jsonResponse['description'];
+      //add a todo item to the list
+      document.getElementById('todos').appendChild(list_item);
+      //in case the error message showed up on a previous error, reset int
+      document.getElementById('error').style.visibility = hidden;
+    })
+    .catch(function(){
+      document.getElementById('error_message').style.visibility = visible;
+    })
+  }
+  </script>
 </html>
