@@ -5,6 +5,10 @@
     <title>Todo</title>
   </head>
   <body>
+    <form method="post" action="/todos/create" />
+        <input type="text" name="description" />
+        <input type="submit" value="create" />
+    </form>
     <ul>
         <!--Data comes from server not hardcoded here, using a Jinja for-loop to bring the description attribute for data-->
         {% for d in data %}
