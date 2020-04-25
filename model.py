@@ -1,11 +1,12 @@
-from flask import  Flask, render_template, request, redirect, url_for, jsonify
+from flask import  Flask, render_template, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
+import sys
 
 # create an application that gets named after the name of our file
 app = Flask(__name__)
 
 # configure flask application to connect to a particular database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost:5432/todo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:_fullstack_@localhost:5432/todo'
 
 # define a db object to link SQLAlchemy to flask app
 db = SQLAlchemy(app)
@@ -27,22 +28,30 @@ db.create_all()
 # Set up a route endpoint to handle user form input
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
-    # The request.get_json() method fetches the json body that was sent to it
-    # in our case, the json body contains the keyword description
-    # the json body is given as a dictionary
-    # use [] to get the description field inside the json body
-    todo_description = request.get_json()['description']
-    if todo_description == '':
-        skip
-    else:
+    error = False
+    body = {}
+    try:
+        # The request.get_json() method fetches the json body that was sent to it
+        # in our case, the json body contains the keyword description
+        # the json body is given as a dictionary
+        # use [] to get the description field inside the json body
         # add record to database
+        todo_description = request.get_json()['description']
         todo_item = Todo(description=todo_description)
         db.session.add(todo_item)
         db.session.commit()
-        # return a json object
-        return jsonify({
-            'description': todo_item.description
-        })
+        # update the json object
+        body['description'] = todo_item.description
+    except:
+         error = True
+         db.session.rollback()
+         print(sys.exc_info())
+    finally:
+         db.session.close()
+    if error:
+         abort(400)
+    else:
+         return jsonify(body)
 
 # Set up a route endpoint to listen to our homepage, the route handler is index
 @app.route('/')

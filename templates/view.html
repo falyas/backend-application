@@ -12,7 +12,8 @@
   </style>
   <body>
     <form id="form">
-        <input type="text" id="description" name="description" />
+        <!--In the database, I set the max length to be 250 character-->
+        <input type="text" id="description" name="description" minlenght="1" maxlength="250" />
         <input type="submit" value="create" />
     </form>
     <div id="error_message" class="error_message"> sorry, something went wrong! </div>
