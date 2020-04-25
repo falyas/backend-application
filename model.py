@@ -6,7 +6,7 @@ import sys
 app = Flask(__name__)
 
 # configure flask application to connect to a particular database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:_fullstack_@localhost:5432/todo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost:5432/todo'
 
 # define a db object to link SQLAlchemy to flask app
 db = SQLAlchemy(app)
