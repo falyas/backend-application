@@ -28,11 +28,7 @@ class Todo(db.Model):
     # Printing method for debugging
     def __repr__(self):
         return f'<Todo {self.id}> {self.description}>'
-
-# for each model class, this call create table if a table doesn't already exist
-# otherwise this call, does nothing
-# db.create_all()
-
+        
 # Set up a route endpoint to handle user form input
 @app.route('/todos/create', methods=['POST'])
 def create_todo():

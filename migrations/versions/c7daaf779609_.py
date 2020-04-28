@@ -24,8 +24,9 @@ def upgrade():
     # this call lets us pass SQL command
     op.execute('UPDATE todos SET completed = False WHERE completed IS NULL;')
 
-    # update the completed column of the todos table to be nullable=False 
-    op.update_column('todos', 'completed', nullable=False)
+    # update the completed column of the todos table to be nullable=False
+    # now any records that have already been in the database will still be there, but will have the inital value of false
+    op.alter_column('todos', 'completed', nullable=False)
     # ### end Alembic commands ###
 
 
