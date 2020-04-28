@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 
 # configure flask application to connect to a particular database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:_fullstack_@localhost:5432/todo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:_fullstack_@localhost:5432/tododb'
 
 # disable warnings about import python files that use SQLAlchemy in the python interpreter
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -23,6 +23,7 @@ class Todo(db.Model):
     __tablename__ = 'todos'
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(250), nullable=False)
+    completed = db.Column(db.Boolean, nullable=False, default=False)
 
     # Printing method for debugging
     def __repr__(self):
@@ -30,7 +31,7 @@ class Todo(db.Model):
 
 # for each model class, this call create table if a table doesn't already exist
 # otherwise this call, does nothing
-db.create_all()
+# db.create_all()
 
 # Set up a route endpoint to handle user form input
 @app.route('/todos/create', methods=['POST'])
