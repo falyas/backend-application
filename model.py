@@ -1,15 +1,22 @@
 from flask import  Flask, render_template, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
-import sys
+from flask_migrate import Migrate
 
 # create an application that gets named after the name of our file
 app = Flask(__name__)
 
 # configure flask application to connect to a particular database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost:5432/todo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:_fullstack_@localhost:5432/todo'
+
+# disable warnings about import python files that use SQLAlchemy in the python interpreter
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # define a db object to link SQLAlchemy to flask app
 db = SQLAlchemy(app)
+
+# link flask app and database instance together to set up migrations
+# The Migrate function allows us to use  the migratation commands to initiate migrations files, upgrade and downgrade our database
+migrate = Migrate(app, db)
 
 # create a table for the Todo-list model
 class Todo(db.Model):
@@ -64,5 +71,6 @@ def index():
     # Pass data to render_template with list of items to render in our todo list
     return render_template('view.html', data=Todo.query.all())
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# run the flask app from the command
+#if __name__ == '__main__':
+#    app.run(debug=True)
