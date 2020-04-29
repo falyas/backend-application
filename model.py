@@ -28,7 +28,7 @@ class Todo(db.Model):
     # Printing method for debugging
     def __repr__(self):
         return f'<Todo {self.id}> {self.description}>'
-        
+
 # Set up a route endpoint to handle user form input
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
